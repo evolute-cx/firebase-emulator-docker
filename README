@@ -20,12 +20,23 @@ We created this image because https://hub.docker.com/r/spine3/firebase-emulator 
 you can use ordinary docker-commands like so:
 (Important: You need to specify your Firebase Project ID with the environment variable `FB_PROJECT_ID`)
 
-```
+```sh
 docker run -d \
   --name firebase-emulator \
   -e FB_PROJECT_ID=[your_project_id] \
   evolutecx/firebase-emulator:latest
 ```
+
+## Adresses
+
+The emulators will be available under these addresses:
+
+- Emulator UI: [http://localhost:4000](http://localhost:4000)
+- Auth Emulator: [http://localhost:9099](http://localhost:9099)
+- Firestore Emulator: [http://localhost:8080](http://localhost:8080)
+- Functions Emulator: [http://localhost:5001](http://localhost:5001)
+- Cloud Storage Emulator: [http://localhost:9199](http://localhost:9199)
+- Realtime DB Emulator: [http://localhost:9000](http://localhost:9000)
 
 ## Persisting Data
 
@@ -34,9 +45,10 @@ The container is configured in a way that it exports all data to /firebase/data 
 
 ### With Docker
 
-Define a named volume (important, a named volume, no bind mount. A bind mount will not work because firebase will complain about the folder destination existing already)
+Define a named volume that points to the `/firebase`-folder in the container.
+IMPORTANT: It has to be a named volume, not a bind mount. A bind mount will not work because firebase will complain about the folder destination existing already
 
-```
+```sh
 docker run -d \
   --name firebase-emulator \
   -v firebase_data:/firebase \
@@ -72,6 +84,6 @@ volumes:
 
 ## ToDo:
 
-Things that we will implement soon
+Things that we will implement soon:
 
 - [ ] Dynamic Port Configuration
