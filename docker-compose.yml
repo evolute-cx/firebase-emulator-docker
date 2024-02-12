@@ -1,0 +1,21 @@
+version: "3.1"
+
+services:
+  firebase-emulator:
+    container_name: firebase-emulator
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 4000:4000 #Emulator UI
+      - 9099:9099 #Firebase Auth
+      - 9199:9199 #Firebase Cloud Storage
+      - 9000:9000 #Firebase Realtime database
+    environment:
+      - FB_PROJECT_ID=[YOUR_PROJECT_ID] # Enter your Firebase project ID here
+    volumes:
+      - firebase_data:/firebase
+
+volumes:
+  firebase_data:
