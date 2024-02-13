@@ -1,6 +1,6 @@
 # firebase-emulator-docker
 
-A dockerized firebase emulator setup, that _actually_ exports existing data when the container shuts down and re-imports data when the container start up again \*
+A dockerized firebase emulator setup, that _actually_ exports existing data when the container shuts down and re-imports data when the container starts up again \*
 
 We created this image because https://hub.docker.com/r/spine3/firebase-emulator failed to export and restore emulator state
 
@@ -40,13 +40,15 @@ The emulators will be available under these addresses:
 
 ## Persisting Data
 
-In order to persist data between runs, a volume is needed.
 The container is configured in a way that it exports all data to /firebase/data on shutdown and re-imports it from there during startup.
+
+In order to persist data between runs, a named volume is needed.
+
+IMPORTANT: It has to be a named volume, not a bind mount. A bind mount will not work because the host always takes precedence over the container and will overwrite the contents in /firebase which we dont want, because that's where all the config is residing too. bind-mounting to /firebase/data will also not work because firebase will complain about the destination existing already. So a named volume is the way to go (for now)
 
 ### With Docker
 
 Define a named volume that points to the `/firebase`-folder in the container.
-IMPORTANT: It has to be a named volume, not a bind mount. A bind mount will not work because firebase will complain about the folder destination existing already
 
 ```sh
 docker run -d \
