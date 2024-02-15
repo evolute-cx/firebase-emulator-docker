@@ -13,9 +13,13 @@ services:
       - 9199:9199 #Firebase Cloud Storage
       - 9000:9000 #Firebase Realtime database
     environment:
-      - FB_PROJECT_ID=[YOUR_PROJECT_ID] # Enter your Firebase project ID here
+      - FB_PROJECT_ID=evolute-test # Enter your Firebase project ID here
     volumes:
-      - firebase_data:/firebase
+      # Firebase will export to `/firebase/data/export/`.
+      # So in order to persist data, you should mount at least that volume.
+      # Make sure to not explicitly mount to /firebase/data/export,
+      # as the emulator will error with `Export failed: dest already exists`
+      - ./firebase-data:/firebase/data:rw
 
 volumes:
   firebase_data:

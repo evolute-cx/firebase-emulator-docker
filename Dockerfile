@@ -31,4 +31,4 @@ WORKDIR /firebase
 #       AUTH    STORE   RLTDB   UI      PUBSUB  emulator ports
 EXPOSE  9099    9199    8080    4000    8085
 
-CMD ["sh", "-c", "firebase emulators:start --import=/firebase/data/ --export-on-exit=/firebase/data/ --project=${FB_PROJECT_ID}"]
+CMD ["sh", "-c", "firebase emulators:start --import=/firebase/data/export/ --export-on-exit=/firebase/data/export/ --project=${FB_PROJECT_ID}"]

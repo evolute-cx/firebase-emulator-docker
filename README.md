@@ -2,9 +2,9 @@
 
 A dockerized firebase emulator setup, that _actually_ exports existing data when the container shuts down and re-imports data when the container starts up again \*
 
-We created this image because https://hub.docker.com/r/spine3/firebase-emulator failed to export and restore emulator state
+We created this image because https://hub.docker.com/r/spine3/firebase-emulator failed to export and restore emulator state and they didnt publish a configurable Dockerfile
 
-\* In order to make this export/import work a named volume is needed - see below "Persisting data"
+\* In order to make this export/import work, a volume is needed - see below "Persisting data"
 
 ## How to use:
 
@@ -40,20 +40,20 @@ The emulators will be available under these addresses:
 
 ## Persisting Data
 
-The container is configured in a way that it exports all data to /firebase/data on shutdown and re-imports it from there during startup.
+The container is configured in a way that it exports all data to `/firebase/data/export` on shutdown and re-imports it from there during startup.
 
-In order to persist data between runs, a named volume is needed.
+In order to persist data between runs, a volume is needed.
 
-IMPORTANT: It has to be a named volume, not a bind mount. A bind mount will not work because the host always takes precedence over the container and will overwrite the contents in /firebase which we dont want, because that's where all the config is residing too. bind-mounting to /firebase/data will also not work because firebase will complain about the destination existing already. So a named volume is the way to go (for now)
+IMPORTANT: The volume should mount to `/firebase/data` in the container, do NOT explicitly mount to `/firebase/data/export`, as the emulator will error with `Export failed: dest already exists`
 
 ### With Docker
 
-Define a named volume that points to the `/firebase`-folder in the container.
+Define a named volume that points to the `/firebase/data`-folder in the container.
 
 ```sh
 docker run -d \
   --name firebase-emulator \
-  -v firebase_data:/firebase \
+  -v ./firebase_data:/firebase/data \
   -e FB_PROJECT_ID=[your_project_id] \
   evolutecx/firebase-emulator:latest
 ```
@@ -78,10 +78,7 @@ services:
     environment:
       - FB_PROJECT_ID=[YOUR_PROJECT_ID]
     volumes:
-      - firebase_data:/firebase # <- this makes sure the data gets persisted
-
-volumes:
-  firebase_data: # <- you also need this
+      - ./firebase-data:/firebase/data:rw # <- this stores data on shutdown to ./firebase-data/data/export on your host
 ```
 
 ## ToDo:
