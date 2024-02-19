@@ -20,6 +20,3 @@ services:
       # Make sure to not explicitly mount to /firebase/data/export,
       # as the emulator will error with `Export failed: dest already exists`
       - ./firebase-data:/firebase/data:rw
-
-volumes:
-  firebase_data:
