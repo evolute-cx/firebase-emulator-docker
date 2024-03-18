@@ -50,6 +50,28 @@ The emulators will be available under these addresses:
 - Cloud Storage Emulator: [http://localhost:9199](http://localhost:9199)
 - Realtime DB Emulator: [http://localhost:9000](http://localhost:9000)
 
+## Changing Firebase Config/Ports
+
+You can mount a custom firebase.json into the container to configure your firebase emulator.
+
+This will give you the ability to change several configuration options, e.g. the ports the container is exposing.
+
+In order to do this, create a custom firebase.json file and mount it into the `/firebase`-directory of the container, like so:
+
+### With Docker:
+
+        volumes:
+          # Mounting a different firebase.json-config into the container to make it run on different ports
+          - ${PWD}/dev/docker-compose/firebase-emulator/firebase_itest.json:/firebase/firebase.json
+
+```sh
+docker run -d \
+  --name firebase-emulator \
+  -v ./firebase_data:/firebase/data \
+  -e FB_PROJECT_ID=[your_project_id] \
+  evolutecx/firebase-emulator:latest
+```
+
 ## Persisting Data
 
 The container is configured in a way that it exports all data to `/firebase/data/export` on shutdown and re-imports it from there during startup.
@@ -105,9 +127,3 @@ More information here: [https://docs.docker.com/build/building/multi-platform/](
 ## Contribution
 
 Feel free to fork the repo and create Merge requests to our repo. Otherwise feel free to create an issue and we will have a look.
-
-## ToDo:
-
-Things that we will implement soon:
-
-- [ ] Dynamic Port Configuration in Dockerfile
